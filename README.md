@@ -50,3 +50,17 @@
 
 11.RetrainLock ReadWriteLock
 java多线程采用的是抢占式算法， RetrainLock  分公平锁 和费公平锁 ，默认是非公平锁，非公平锁即，有新锁获取需求来了可以直接抢占正好释放掉的锁，类比路口车辆启动 启动快的车辆快速启动抢占道路，公平所消耗比非公平锁要答，因为内部需要考虑获取锁的顺序，需要判断顺序。ReadWriteLock  多个获取读锁的可共享，但是读和写，写和写 都互斥
+
+
+12.线程池ThreadPoolExecutor实现原理
+
+execute方法执行逻辑有这样几种情况：
+
+如果当前运行的线程少于corePoolSize，则会创建新的线程来执行新的任务；
+如果运行的线程个数等于或者大于corePoolSize，则会将提交的任务存放到阻塞队列workQueue中；
+如果当前workQueue队列已满的话，则会创建新的线程来执行任务；
+如果线程个数已经超过了maximumPoolSize，则会使用饱和策略RejectedExecutionHandler来进行处理。
+
+需要注意的是，线程池的设计思想就是使用了核心线程池corePoolSize，阻塞队列workQueue和线程池maximumPoolSize，这样的缓存策略来处理任务，实际上这样的设计思想在需要框架中都会使用。
+
+

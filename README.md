@@ -94,3 +94,50 @@ slab分配算法： memcached给Slab分配内存空间，默认是1MB。分配�
 因此，直接命中次数是3,最后缓存即将准备淘汰的数据项是5
 
 
+
+14. redis 
+
+redis 五种数据类型
+
+类型常量	对象的名称
+REDIS_STRING	字符串对象
+REDIS_LIST	列表对象
+REDIS_HASH	哈希对象
+REDIS_SET	集合对象
+REDIS_ZSET	有序集合对象
+
+
+底层数据结构共有八种，如下表所示：
+
+编码常量	编码所对应的底层数据结构
+REDIS_ENCODING_INT	long 类型的整数
+REDIS_ENCODING_EMBSTR	embstr 编码的简单动态字符串
+REDIS_ENCODING_RAW	简单动态字符串
+REDIS_ENCODING_HT	字典
+REDIS_ENCODING_LINKEDLIST	双端链表
+REDIS_ENCODING_ZIPLIST	压缩列表
+REDIS_ENCODING_INTSET	整数集合
+REDIS_ENCODING_SKIPLIST	跳跃表和字典
+
+
+Redis 底层中的 SDS   没有使用C语言传统的字符串表示，而是自己构建了一种名为简单动态字符串（simple dynamic string，SDS） 的抽象类型，并将SDS用作Redis的默认字符串表示。
+SDS相比较于c字符串的好处
+取字符长度，SDS直接读取len属性。
+杜绝缓冲区溢出。C字符串拼接时时假定已经为拼接的字符串预留了足够多的内存，如果这个假定不成立，那么就会产生缓冲区溢出。而SDS是这样做的：SDS的API会会先检查SDS的空间是否满足所需的要求，如果不满足，API自动将空间扩展至所需大小。
+减少修改字符串长度时所需的内存重分配次数。
+二进制安全。
+Redis基于以上数据结构创建了一个对象系统，每种对象都用到了至少一种之前介绍的数据结构。
+每次当我们在Redis中新创建一个键值对时，我们至少会创建两个对象，一个对象用作键值对的键（键对象），另一个对象用作键值对的值（值对象）。
+使用对象系统的好处：
+
+（1）在执行命令时，根据对象类型判断一个对象是否可以执行给定的命令
+
+（2）针对不同的使用场景，为对象设置多种不同的数据结构，从而优化对象在不同场景下的使用效率；
+
+（3）基于对象引用计数技术实现内存的回收；
+
+（4）通过引用计数技术实现对象的共享；
+
+在Redis中每个对象都由一个redisObject结构表示，包含了type，encoding，ptr属性：
+
+

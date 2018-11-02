@@ -310,3 +310,19 @@ SESSION_TRANSACTED = 0    事务提交并确认
 此外AcitveMQ补充了一个自定义的ACK模式:
 INDIVIDUAL_ACKNOWLEDGE = 4    单条消息确认
 
+RabbitMQ：基于AMQP协议（Advanced Message Queue Protocol）
+ActiveMQ：基于STOMP协议（注：我只知道是基于JMS）
+
+AMQP 是一个开放标准，目前还在 0.9 版本。尚未成熟，但市场上已经出现了很多这个标准的实现产品。
+
+afka和RabbitMQ的比较
+
+1、  RabbitMq比kafka成熟，在可用性上，稳定性上，可靠性上，RabbitMq超过kafka
+
+2、  Kafka设计的初衷就是处理日志的，可以看做是一个日志系统，针对性很强，所以它并没有具备一个成熟MQ应该具备的特性
+
+3、  Kafka的性能（吞吐量、tps）比RabbitMq要强，这篇文章的作者认为，两者在这方面没有可比性。
+
+     Topic方式发送的消息与queue方式发送的消息，发送和接收的效率，在一个订阅者和100个订阅者的前提下没有明显差异，但在500个订阅者并发的前提下，topic方式的效率明显低于queue。
+
+        Queue方式发送的消息，在一个订阅者、100个订阅者和500个订阅者的前提下，发送和接收的效率没有明显变化。

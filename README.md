@@ -1,5 +1,9 @@
 # interviewQA
 
+后端架构师技术图谱
+
+https://www.cnblogs.com/xdecode/p/9212881.html 
+
 **整理的一些面试题目**
 
 1.一次完成的HTTP请求过程

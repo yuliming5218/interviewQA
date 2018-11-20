@@ -476,6 +476,7 @@ sleep()和yield()方法，同样都是当前线程会交出处理器资源，而
 Java并发知识图谱
 https://github.com/CL0610/Java-concurrency/blob/master/Java%E5%B9%B6%E5%8F%91%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1.png
 
+![JAVA并发知识图谱.png](https://github.com/CL0610/Java-concurrency/blob/master/Java并发知识图谱.png)
 
 18.设计模式
 
@@ -492,3 +493,8 @@ https://github.com/CL0610/Java-concurrency/blob/master/Java%E5%B9%B6%E5%8F%91%E7
 迪米特法则：一个软件实体应当尽可能少地与其他实体发生相互作用，通过中间类建立联系。
 
 合成复用原则：尽量使用合成/聚合,而不是使用继承。
+
+
+单例模式有三种：懒汉式单例，饿汉式单例，登记式单例。
+
+![登记式单例](https://img-blog.csdn.net/2018030811254564?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvWUVDcmF6eQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)

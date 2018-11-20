@@ -420,3 +420,38 @@ TIME_WAIT
 
  为什么需要TIME_WAIT？TIME_WAIT是TCP协议用以保证被重新分配的socket不会受到之前残留的延迟重发报文影响的机制,是必要的逻辑保证。
 
+17.如何在用户程序中新建一个线程了？ 线程池有哪些参数？线程池饱和策略？ 线程的5中状态以及各状态之间的关系？
+
+如何在用户程序中新建一个线程了？
+
+通过继承Thread类，重写run方法；
+
+通过实现runable接口；
+
+通过实现callable接口这三种方式
+
+
+线程池有哪些参数？
+ 
+
+
+线程的5中状态以及各状态之间的关系？
+https://juejin.im/post/5ae6cf7a518825670960fcc2
+
+ 线程创建之后调用start()方法开始运行，当调用wait(),join(),LockSupport.lock()方法线程会进入到WAITING状态，而同样的wait(long timeout)，sleep(long),join(long),LockSupport.parkNanos(),LockSupport.parkUtil()增加了超时等待的功能，也就是调用这些方法后线程会进入TIMED_WAITING状态，当超时等待时间到达后，线程会切换到Runable的状态，另外当WAITING和TIMED _WAITING状态时可以通过Object.notify(),Object.notifyAll()方法使线程转换到Runable状态。当线程出现资源竞争时，即等待获取锁的时候，线程会进入到BLOCKED阻塞状态，当线程获取锁时，线程进入到Runable状态。线程运行结束后，线程进入到TERMINATED状态，状态转换可以说是线程的生命周期。
+
+
+sleep() VS wait()
+
+两者主要的区别：
+
+sleep()方法是Thread的静态方法，而wait是Object实例方法
+wait()方法必须要在同步方法或者同步块中调用，也就是必须已经获得对象锁。而sleep()方法没有这个限制可以在任何地方种使用。另外，wait()方法会释放占有的对象锁，使得该线程进入等待池中，等待下一次获取资源。而sleep()方法只是会让出CPU并不会释放掉对象锁；
+sleep()方法在休眠时间达到后如果再次获得CPU时间片就会继续执行，而wait()方法必须等待Object.notift/Object.notifyAll通知后，才会离开等待池，并且再次获得CPU时间片才会继续执行。
+
+sleep()和yield()方法，同样都是当前线程会交出处理器资源，而它们不同的是，sleep()交出来的时间片其他线程都可以去竞争，也就是说都有机会获得当前线程让出的时间片。而yield()方法只允许与当前线程具有相同优先级的线程能够获得释放出来的CPU时间片。
+
+守护线程在退出的时候并不会执行finnaly块中的代码，所以将释放资源等操作不要放在finnaly块中执行，这种操作是不安全的
+线程可以通过setDaemon(true)的方法将线程设置为守护线程。并且需要注意的是设置守护线程要先于start()方法，否则会报
+
+

@@ -500,3 +500,7 @@ https://github.com/CL0610/Java-concurrency/blob/master/Java%E5%B9%B6%E5%8F%91%E7
 单例模式有三种：懒汉式单例，饿汉式单例，登记式单例。
 
 ![登记式单例](https://img-blog.csdn.net/2018030811254564?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvWUVDcmF6eQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+
+
+17. 分布式式任务系统设计理念：clover tbschedule等设计原理
+海量分布式定时任务系统 ，触发方式。  类似游标限流方式，将每秒要执行的任务记录到  对应的秒的时间窗口里面，按照时间的推进 分别取出对应的时间窗口里面的任务进行激发任务的执行

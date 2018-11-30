@@ -504,3 +504,44 @@ https://github.com/CL0610/Java-concurrency/blob/master/Java%E5%B9%B6%E5%8F%91%E7
 
 17. 分布式式任务系统设计理念：clover tbschedule等设计原理
 海量分布式定时任务系统 ，触发方式。  类似游标限流方式，将每秒要执行的任务记录到  对应的秒的时间窗口里面，按照时间的推进 分别取出对应的时间窗口里面的任务进行激发任务的执行
+
+18. zookeeper   
+zookeeper学习 https://blog.csdn.net/xzqxiaoqing/article/details/80792860
+
+Zookeeper 的核心是原子广播，这个机制保证了各个Server之间的同步。实现这个机制的协议叫做Zab协议。Zab协议有两种模式，它们分别是恢复模式（选主）和广播模式（同步）。当服务启动或者在领导者崩溃后，Zab就进入了恢复模式，当领导者被选举出来，且大多数Server完成了和 leader的状态同步以后，恢复模式就结束了。状态同步保证了leader和Server具有相同的系统状态。
+
+协议zab协议，原子广播协议， 选举机制是统统paxos协议 Zk的选举算法有两种：一种是基于basic paxos实现的，另外一种是基于fast paxos算法实现的。系统默认的选举算法为fast paxos。
+
+Watch是轻量级的，其实就是本地JVM的Callback，服务器端只是存了是否有设置了Watcher的布尔类型
+
+每个Server在工作过程中有三种状态： 
+LOOKING：当前Server不知道leader是谁，正在搜寻
+LEADING：当前Server即为选举出来的leader
+FOLLOWING：leader已经选举出来，当前Server与之同步
+
+zookeeper是如何保证事务的顺序一致性的？
+zookeeper采用了递增的事务Id来标识，所有的proposal（提议）都在被提出的时候加上了zxid，zxid实际上是一个64位的数字，高32位是epoch（时期; 纪元; 世; 新时代）用来标识leader是否发生改变，如果有新的leader产生出来，epoch会自增，低32位用来递增计数。当新产生proposal的时候，会依据数据库的两阶段过程，首先会向其他的server发出事务执行请求，如果超过半数的机器都能执行并且能够成功，那么就会开始执行。
+
+Zookeeper数据复制
+1、写主(WriteMaster) ：对数据的修改提交给指定的节点。读无此限制，可以读取任何一个节点。这种情况下客户端需要对读与写进行区别，俗称读写分离； 
+2、写任意(Write Any)：对数据的修改可提交给任意的节点，跟读一样。这种情况下，客户端对集群节点的角色与变化透明。
+
+对zookeeper来说，它采用的方式是写任意。通过增加机器，它的读吞吐能力和响应能力扩展性非常好，而写，随着机器的增多吞吐能力肯定下降（这也是它建立observer的原因），而响应能力则取决于具体实现方式，是延迟复制保持最终一致性，还是立即复制快速响应。
+
+四种类型的znode
+1、PERSISTENT-持久化目录节点 
+客户端与zookeeper断开连接后，该节点依旧存在 
+2、PERSISTENT_SEQUENTIAL-持久化顺序编号目录节点
+客户端与zookeeper断开连接后，该节点依旧存在，只是Zookeeper给该节点名称进行顺序编号 
+3、EPHEMERAL-临时目录节点
+客户端与zookeeper断开连接后，该节点被删除 
+4、EPHEMERAL_SEQUENTIAL-临时顺序编号目录节点
+客户端与zookeeper断开连接后，该节点被删除，只是Zookeeper给该节点名称进行顺序编号
+
+Zookeeper做了什么？
+1、命名服务
+2、配置管理
+3、集群管理
+4、分布式锁
+5、队列管理
+

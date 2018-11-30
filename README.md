@@ -100,6 +100,8 @@ slab分配算法： memcached给Slab分配内存空间，默认是1MB。分配�
 
 
 14. redis 
+分布式reids复习精华
+https://blog.csdn.net/xzqxiaoqing/article/details/82662145
 
 redis 的 rehash 机制，渐进式序列化 ？？
 

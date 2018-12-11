@@ -103,6 +103,34 @@ slab分配算法： memcached给Slab分配内存空间，默认是1MB。分配�
 分布式reids复习精华
 https://blog.csdn.net/xzqxiaoqing/article/details/82662145
 
+redis集群 数据迁移方式 Hash槽 和 一致性hash对比，优缺点比较
+
+集群：
+是一个提供多个Redis（分布式）节点间共享数据的程序集。
+集群部署
+Redis 集群的键空间被分割为 16384 hash个槽（slot）， 集群的最大节点数量也是 16384 个
+关系:cluster>node>slot>key
+
+Redis Cluster在设计中没有使用一致性哈希（Consistency Hashing），而是使用数据分片引入哈希槽（hash slot）来实现；
+
+一个 Redis Cluster包含16384（0~16383）个哈希槽，存储在Redis Cluster中的所有键都会被映射到这些slot中，
+
+集群中的每个键都属于这16384个哈希槽中的一个，集群使用公式slot=CRC16（key）/16384来计算key属于哪个槽，其中CRC16(key)语句用于计算key的CRC16 校验和。
+
+为什么Redis集群要设置16384个槽？
+
+这是一个很有趣的问题。我们都知道redis集群有16384个槽（slot）。那么为什么就要是16384呢？redis在用key进行定位的时候，使用CRC16进行校验，CRC16是16位的，理论上说有2^16 -1=65535个不同的值，为什么不用65535呢？
+
+1，在一个节点的心跳包文中，包含着这个节点所有的配置信息。使用16K个槽，需要的内存空间大约是2K。如果使用65K个槽，那么需要的内存空间是8K。
+
+
+2，reids集群中主节点数量基本不可能超过1000。(however the suggested max size of nodes is in the order of ~ 1000 nodes).所以可以保证每个主节点上槽的数量不会太少。
+
+
+3，redis节点的配置信息在通过bitmap存储的。bitmap在传输过程中会进行压缩。而压缩比和（槽的数量/节点数）有关，这个值越大。压缩比越小。所以如果采用65535个槽，那么压缩率就会比较小。
+
+综合考虑，redis的作者选择了16384
+
 redis 的 rehash 机制，渐进式序列化 ？？
 
 redis 五种数据类型
